@@ -1,9 +1,8 @@
 <div>
-  <h1>Hello {{data.name}}</h1>
-
-  {% if data.foo %}
-  {% include './shared/true.html' %}
+  <h1>Hello {{ data.name }}</h1>
+  {% if data.condition %}
+    {% include "./shared/true.html" %}
   {% else %}
-  {% include './shared/false.html' %}
+    {% include "./shared/false.html" %}
   {% endif %}
 </div>
