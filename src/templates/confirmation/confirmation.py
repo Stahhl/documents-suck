@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class Data(BaseModel):
+class Confirmation(BaseModel):
     name: str
     condition: bool
