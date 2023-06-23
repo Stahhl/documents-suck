@@ -1,8 +1,8 @@
 <div>
   <h1>Hello {{ data.name }}</h1>
   {% if data.condition %}
-    {% include "./shared/true.html" %}
+    {% include "./_shared/false.html" %}
   {% else %}
-    {% include "./shared/false.html" %}
+    {% include "./_shared/false.html" %}
   {% endif %}
 </div>

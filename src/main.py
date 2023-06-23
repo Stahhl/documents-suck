@@ -11,4 +11,4 @@ templates = Jinja2Templates(directory="templates")
 
 @app.post("/template/confirmation")
 async def createMall(request: Request, data: Data):
-    return templates.TemplateResponse("confirmation.html", {"request": request, "data": data})
+    return templates.TemplateResponse("confirmation/confirmation.html", {"request": request, "data": data})
