@@ -9,3 +9,8 @@ cd .\src\
 
 uvicorn main:app --reload
 ```
+
+# vscode
+* REST Client
+* Django
+* djlint
