@@ -1,0 +1,6 @@
+{
+	"/": [],
+	"/confirmation": [
+		"src/routes/confirmation/+page.ts"
+	]
+}
