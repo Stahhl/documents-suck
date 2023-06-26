@@ -1,12 +1,23 @@
 <script lang="ts">
+    import submitContent from '../../utils/utils.js';
 	export let data;
 
-    console.log(data)
+    function handleSubmit() {
+        let content = document.querySelector(".content")
+
+        submitContent(content?.innerHTML)
+    }
 </script>
 
-{@html data.content}
+<div class="content">
+	{@html data.content}
+</div>
 
-<style>
+<form method="POST" on:submit|preventDefault={handleSubmit}>
+    <button>Log in</button>
+</form>
+
+<style global>
 	:global(h1) {
 		color: red;
 	}

@@ -14,7 +14,7 @@ export async function load({ fetch }) {
 
     const content = await response.text()
 
-    console.log(content)
+    // console.log(content)
 
-    return {content: content}
+    return {content}
 }
