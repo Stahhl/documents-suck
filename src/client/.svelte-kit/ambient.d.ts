@@ -40,6 +40,8 @@ declare module '$env/static/private' {
 	export const CONDA_PROMPT_MODIFIER: string;
 	export const DriverData: string;
 	export const emulator: string;
+	export const FPS_BROWSER_APP_PROFILE_STRING: string;
+	export const FPS_BROWSER_USER_PROFILE_STRING: string;
 	export const GIT_ASKPASS: string;
 	export const HOME: string;
 	export const HOMEDRIVE: string;
@@ -60,6 +62,10 @@ declare module '$env/static/private' {
 	export const npm_lifecycle_event: string;
 	export const npm_lifecycle_script: string;
 	export const npm_node_execpath: string;
+	export const npm_package_dependencies_autoprefixer: string;
+	export const npm_package_dependencies_postcss: string;
+	export const npm_package_dependencies_tailwindcss: string;
+	export const npm_package_dependencies__tailwindcss_typography: string;
 	export const npm_package_devDependencies_eslint: string;
 	export const npm_package_devDependencies_eslint_config_prettier: string;
 	export const npm_package_devDependencies_eslint_plugin_svelte: string;
@@ -111,7 +117,6 @@ declare module '$env/static/private' {
 	export const PROMPT: string;
 	export const PSModulePath: string;
 	export const PUBLIC: string;
-	export const SESSIONNAME: string;
 	export const SystemDrive: string;
 	export const SystemRoot: string;
 	export const TEMP: string;
@@ -128,6 +133,9 @@ declare module '$env/static/private' {
 	export const VSCODE_GIT_IPC_HANDLE: string;
 	export const VSCODE_INJECTION: string;
 	export const windir: string;
+	export const WSLENV: string;
+	export const WT_PROFILE_ID: string;
+	export const WT_SESSION: string;
 }
 
 /**
@@ -171,6 +179,8 @@ declare module '$env/dynamic/private' {
 		CONDA_PROMPT_MODIFIER: string;
 		DriverData: string;
 		emulator: string;
+		FPS_BROWSER_APP_PROFILE_STRING: string;
+		FPS_BROWSER_USER_PROFILE_STRING: string;
 		GIT_ASKPASS: string;
 		HOME: string;
 		HOMEDRIVE: string;
@@ -191,6 +201,10 @@ declare module '$env/dynamic/private' {
 		npm_lifecycle_event: string;
 		npm_lifecycle_script: string;
 		npm_node_execpath: string;
+		npm_package_dependencies_autoprefixer: string;
+		npm_package_dependencies_postcss: string;
+		npm_package_dependencies_tailwindcss: string;
+		npm_package_dependencies__tailwindcss_typography: string;
 		npm_package_devDependencies_eslint: string;
 		npm_package_devDependencies_eslint_config_prettier: string;
 		npm_package_devDependencies_eslint_plugin_svelte: string;
@@ -242,7 +256,6 @@ declare module '$env/dynamic/private' {
 		PROMPT: string;
 		PSModulePath: string;
 		PUBLIC: string;
-		SESSIONNAME: string;
 		SystemDrive: string;
 		SystemRoot: string;
 		TEMP: string;
@@ -259,6 +272,9 @@ declare module '$env/dynamic/private' {
 		VSCODE_GIT_IPC_HANDLE: string;
 		VSCODE_INJECTION: string;
 		windir: string;
+		WSLENV: string;
+		WT_PROFILE_ID: string;
+		WT_SESSION: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: string]: string | undefined;
 	}

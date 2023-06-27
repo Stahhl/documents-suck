@@ -1,6 +1,6 @@
 {
 	"/": [],
-	"/confirmation": [
-		"src/routes/confirmation/+page.server.ts"
+	"/playground": [
+		"src/routes/playground/+page.server.ts"
 	]
 }
