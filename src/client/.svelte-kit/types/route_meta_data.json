@@ -1,5 +1,8 @@
 {
 	"/": [],
+	"/api/download": [
+		"src/routes/api/download/+server.ts"
+	],
 	"/playground": [
 		"src/routes/playground/+page.server.ts"
 	]

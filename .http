@@ -3,7 +3,11 @@
 
 POST {{host}}/template/confirmation
 
-{
-	"name": "world",
-	"condition": false
-}
+{"name":"foo","condition":true}
+
+###
+
+POST http://127.0.0.1:8000/template/playground
+content-type: application/json
+
+{"contents":"adadad"}
