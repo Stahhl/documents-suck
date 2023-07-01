@@ -2,6 +2,13 @@ namespace DocumentService;
 
 public class FileService
 {
+    private readonly ILogger<FileService> _logger;
+
+    public FileService(ILogger<FileService> logger)
+    {
+        _logger = logger;
+    }
+
     public async Task<byte[]> GetFile(string html)
     {
         var tempDirectoryName = TempDirectory();
@@ -24,23 +31,20 @@ public class FileService
         finally
         {
             // Remove the temporary directory and its contents
-            // Directory.Delete(tempDirectoryName, true);
+            Directory.Delete(tempDirectoryName, true);
+            _logger.LogInformation("Tagit bort arbetskatalog: {Dir}", tempDirectoryName);
         }
     }
 
-    private static string TempDirectory()
+    private string TempDirectory()
     {
-        // Get the system's temporary folder path
-        string tempFolderPath = Path.GetTempPath();
-
         // Create a unique directory name
-        string tempDirectoryName = Path.Combine(tempFolderPath, Guid.NewGuid().ToString());
+        var tempDirectoryName = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         // Create the temporary directory
         Directory.CreateDirectory(tempDirectoryName);
 
-        // Switch to the temporary directory
-        Directory.SetCurrentDirectory(tempDirectoryName);
+        _logger.LogInformation("Skapat arbetskatalog: {Dir}", tempDirectoryName);
 
         return tempDirectoryName;
     }
