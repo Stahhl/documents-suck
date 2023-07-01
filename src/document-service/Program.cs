@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -27,6 +30,8 @@ var app = builder.Build();
 
 app.UseCors();
 
+app.MapReverseProxy();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -35,21 +40,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.MapPost("/document/{id}/html", async (
-    [FromServices] ILogger<Program> logger,
-    [FromServices] TemplateService service,
-    [FromRoute] string id,
-    [FromBody] object request) =>
-{
-    var html = await service.GetHtml(id, request);
-
-    logger.LogInformation(html);
-
-    return Results.Extensions.Html(html);
-})
-.Accepts<object>("application/json")
-.Produces<string>((int)HttpStatusCode.OK, "text/html");
 
 app.MapPost("/document/{id}/pdf", async (
     [FromServices] ILogger<Program> logger,
@@ -67,6 +57,6 @@ app.MapPost("/document/{id}/pdf", async (
     return Results.File(file, contentType: "text/plain", fileDownloadName: "foo.txt");
 })
 .Accepts<object>("application/json")
-.Produces<byte[]>((int)HttpStatusCode.OK, "text/pdf");
+.Produces<byte[]>((int)HttpStatusCode.OK, "application/pdf");
 
 app.Run();
