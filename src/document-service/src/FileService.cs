@@ -1,51 +1,46 @@
+using System.IO.Compression;
+
 namespace DocumentService;
 
 public class FileService
 {
-    private readonly ILogger<FileService> _logger;
+    public const string StaticFilePath = "./static";
 
-    public FileService(ILogger<FileService> logger)
+    public async Task<byte[]?> GetStaticFile(string fileName)
     {
-        _logger = logger;
+        var filePath = Path.Combine(StaticFilePath, fileName);
+
+        if (!File.Exists(filePath)) return null;
+
+        return await File.ReadAllBytesAsync(filePath);
     }
 
-    public async Task<byte[]> GetFile(string html)
+    public static string GetRandomFilenameWithoutExtension()
     {
-        var tempDirectoryName = TempDirectory();
-
-        try
-        {
-            var fileName = Path.GetRandomFileName() + ".txt";
-            var filePath = Path.Combine(tempDirectoryName, fileName);
-
-            await File.WriteAllTextAsync(filePath, html);
-            var result = await File.ReadAllBytesAsync(filePath);
-
-            return result;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("An error occurred: " + ex.Message);
-            throw;
-        }
-        finally
-        {
-            // Remove the temporary directory and its contents
-            Directory.Delete(tempDirectoryName, true);
-            _logger.LogInformation("Tagit bort arbetskatalog: {Dir}", tempDirectoryName);
-        }
+        return Path.ChangeExtension(Path.GetRandomFileName(), null);
     }
 
-    private string TempDirectory()
+    public static bool DeleteDirectory(string directory)
     {
-        // Create a unique directory name
-        var tempDirectoryName = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        Directory.Delete(directory, true);
 
-        // Create the temporary directory
-        Directory.CreateDirectory(tempDirectoryName);
+        return !Directory.Exists(directory);
+    }
 
-        _logger.LogInformation("Skapat arbetskatalog: {Dir}", tempDirectoryName);
+    public static byte[] ZipDirectory(string directoryPath)
+    {
+        using var ms = new MemoryStream();
+        using var zipArchive = new ZipArchive(ms, ZipArchiveMode.Create, true);
 
-        return tempDirectoryName;
+        var directoryInfo = new DirectoryInfo(directoryPath);
+        var basePath = directoryInfo.Parent?.FullName ?? throw new ArgumentNullException();
+
+        foreach (var file in directoryInfo.GetFiles("*", SearchOption.AllDirectories))
+        {
+            var entryName = file.FullName[(basePath.Length + 1)..];
+            zipArchive.CreateEntryFromFile(file.FullName, entryName);
+        }
+
+        return ms.ToArray();
     }
 }

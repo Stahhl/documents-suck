@@ -27,6 +27,7 @@
 % Set up the page style
 \pagestyle{fancy}
 \fancyhf{} % Clear default header and footer
+% TODO variables
 \rfoot{Company Email: info@company.com, Telephone: 555-555 55 55} % Set the footer content
 
 % the following needs to be ran in this order
@@ -42,7 +43,8 @@
     \centering
     \begin{minipage}[t]{0.3\textwidth}
         \vspace{0pt} % Align minipage with the top of the image
-        \includegraphics[width=0.5\textwidth]{frog.jpg}
+        \includegraphics[width=0.5\textwidth]{logo.jpg}
+        % \href{http://localhost:5099/static/frog.jpg}{\includegraphics[width=0.5\textwidth]{frog.jpg}}
     \end{minipage}
     \hfill
     \begin{minipage}[t]{0.6\textwidth}
@@ -66,7 +68,7 @@
 %----------------------------------------------------------------------------------------
 %	INSERT
 %----------------------------------------------------------------------------------------
-foobar
+{{data}}
 
 %----------------------------------------------------------------------------------------
 %	END
