@@ -58,13 +58,7 @@ def insert_latex_into_template(
 ):
     output_file_path = os.path.join(work_dir, "output.tex")
     template = templates.get_template("_latex/template.tex")
-    output = template.render(
-        {
-            "email": data.document.email,
-            "telephone": data.document.telephone,
-            "body": latex_contents,
-        }
-    )
+    output = template.render({"data": data, "body": latex_contents})
 
     with open(output_file_path, "w") as file:
         file.write(output)
