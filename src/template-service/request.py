@@ -9,12 +9,9 @@ class DocumentData(BaseModel):
 class RequestModel(BaseModel):
     document: DocumentData 
 
-class Item(BaseModel):
-    document: DocumentData
+class AnyRequestModel(RequestModel):
     template: dict
 
 class FExtension(str, Enum):
-    html = "html"
-    latex = "latex"
     pdf = "pdf"
     zip = "zip"
