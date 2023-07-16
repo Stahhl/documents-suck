@@ -15,10 +15,10 @@ public class TemplateService
         _logger = logger;
     }
 
-    public async Task<string> GetHtml(string id, object request)
+    public async Task<string> GetHtml(string id, RequestModel request)
     {
         var url = $"{_baseUrl}/template/{id}";
-        var body = JsonSerializer.Serialize(request);
+        var body = JsonSerializer.Serialize(request, new JsonSerializerOptions(){PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
 
         _logger.LogInformation("body: {Body}", body);
 

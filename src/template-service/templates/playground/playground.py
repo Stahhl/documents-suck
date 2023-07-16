@@ -1,4 +1,7 @@
-from pydantic import BaseModel
+from imports import *
 
-class Playground(BaseModel):
-    contents: str
+class TemplateData(BaseModel):
+    contents: str = "<h1>hello world</h2>"
+
+class Playground(RequestModel):
+    template: TemplateData

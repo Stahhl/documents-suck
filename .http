@@ -11,3 +11,18 @@ POST http://127.0.0.1:8000/template/playground
 content-type: application/json
 
 {"contents":"adadad"}
+
+###
+
+POST http://127.0.0.1:8000/template/playground/zip
+content-type: application/json
+
+{
+  "document": {
+    "email": "foo@bar.com",
+    "telephone": "555-555 55 55"
+  },
+  "template": {
+    "contents": "<h1>hello world</h2>"
+  }
+}

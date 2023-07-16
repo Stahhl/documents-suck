@@ -15,12 +15,12 @@ public class LatexService
     private const string TemplateTex = "template.tex";
     private const string LogoImage = "logo.jpg";
 
-    public async Task<(byte[] pdfBytes, string workDir)> HtmlToLatexToPdf(string html)
+    public async Task<(byte[] pdfBytes, string workDir)> HtmlToLatexToPdf(RequestModel request, string html)
     {
         try
         {
             var inputLatexFilePath = await ConvertHtmlToLatex(html);
-            var outputLatexFilePath = await InsertLatexInTemplate(inputLatexFilePath);
+            var outputLatexFilePath = await InsertLatexInTemplate(request, inputLatexFilePath);
             var pdfBytes = await LatexToPdf(outputLatexFilePath);
 
             return new(pdfBytes, _workDir);
@@ -50,10 +50,11 @@ public class LatexService
         return result;
     }
 
-    private async Task<string> InsertLatexInTemplate(string inputLatexFilePath)
+
+    private async Task<string> InsertLatexInTemplate(RequestModel request, string inputLatexFilePath)
     {
         var inputLatex = await File.ReadAllTextAsync(inputLatexFilePath);
-        var json = JsonSerializer.Serialize(new { data = inputLatex });
+        var json = JsonSerializer.Serialize(new Data(request.Document.Email, request.Document.Telephone, inputLatex));
 
         var templateFilePath = Path.Combine(FileService.StaticFilePath, TemplateTex);
         var inputFilePath = Path.Combine(_workDir, Payload);
@@ -78,10 +79,12 @@ public class LatexService
         return outputFilePath;
     }
 
-    private async Task<string> ConvertHtmlToLatex(string html)
+    public record Data(string email, string telephone, string body);
+
+    private async Task<string> ConvertHtmlToLatex(string workDir, string html)
     {
-        var inputFilePath = Path.Combine(_workDir, InputHtml);
-        var outputFilePath = Path.Combine(_workDir, InputTex);
+        var inputFilePath = Path.Combine(workDir, "input.html");
+        var outputFilePath = Path.Combine(workDir, "input.tex");
 
         await File.WriteAllTextAsync(inputFilePath, html);
 
@@ -91,7 +94,7 @@ public class LatexService
                 args.Add("run")
                     .Add("--rm")
                     .Add("--volume")
-                    .Add($"{_workDir}:/data")
+                    .Add($"{workDir}:/data")
                     .Add("pandoc/latex")
                     .Add(InputHtml)
                     .Add("-f")

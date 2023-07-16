@@ -1,6 +1,4 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
+from request import *
 from templates.confirmation.confirmation import Confirmation
 from templates.playground.playground import Playground

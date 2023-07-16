@@ -12,6 +12,7 @@ builder.Services.AddReverseProxy()
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
     options.SerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
 });
 
@@ -25,68 +26,42 @@ builder.Services.AddScoped<FileService>();
 var app = builder.Build();
 
 app.UseCors();
-
 app.MapReverseProxy();
-
 app.UseHttpsRedirection();
 
-app.MapGet("/static/{filename}", async (
-    [FromServices] FileService fileService,
-    [FromRoute] string fileName) =>
-{
-    var fileBytes = await fileService.GetStaticFile(fileName);
-
-    if (fileBytes is null) return Results.NotFound(fileName);
-
-    return Results.File(fileBytes, contentType: "application/octet-stream", fileDownloadName: fileName);
-})
-.Produces<byte[]>((int)HttpStatusCode.OK, "application/octet-stream");
-
-app.MapPost("/document/{id}/pdf", async (
+app.MapPost("/document/{id}/{ext}", async (
     [FromServices] ILogger<Program> logger,
     [FromServices] TemplateService templateService,
     [FromServices] LatexService latexService,
     [FromRoute] string id,
-    [FromBody] object request) =>
+    [FromRoute] string ext,
+    [FromBody] RequestModel request) =>
 {
     var html = await templateService.GetHtml(id, request);
 
     logger.LogInformation(html);
 
-    var (pdfBytes, workDir) = await latexService.HtmlToLatexToPdf(html);
+    if (ext == "latex")
+    {
+        
+    }
 
-    var success = FileService.DeleteDirectory(workDir);
+    var (pdfBytes, workDir) = await latexService.HtmlToLatexToPdf(request, html);
 
-    logger.LogInformation("workDir deleted: {Success}", success);
-
-    return Results.File(pdfBytes, contentType: "application/pdf", fileDownloadName: $"{FileService.GetRandomFilenameWithoutExtension()}.pdf");
-})
-.Accepts<object>("application/json")
-.Produces<byte[]>((int)HttpStatusCode.OK, "application/pdf");
-
-app.MapPost("/document/{id}/zip", async (
-    [FromServices] ILogger<Program> logger,
-    [FromServices] TemplateService templateService,
-    [FromServices] LatexService latexService,
-    [FromRoute] string id,
-    [FromBody] object request) =>
-{
-    var html = await templateService.GetHtml(id, request);
-
-    logger.LogInformation(html);
-
-    var (pdfBytes, workDir) = await latexService.HtmlToLatexToPdf(html);
+    if (ext == "pdf")
+        return Results.File(pdfBytes, contentType: "application/pdf", fileDownloadName: $"{FileService.GetRandomFilenameWithoutExtension()}.pdf");
 
     var zipBytes = FileService.ZipDirectory(workDir);
 
-    var success = FileService.DeleteDirectory(workDir);
-
-    logger.LogInformation("workDir deleted: {Success}", success);
-
     return Results.File(zipBytes, contentType: "application/zip", fileDownloadName: $"{FileService.GetRandomFilenameWithoutExtension()}.zip");
+
 })
 .Accepts<object>("application/json")
+.Produces<byte[]>((int)HttpStatusCode.OK, "application/pdf")
 .Produces<byte[]>((int)HttpStatusCode.OK, "application/zip");
 
-
 app.Run();
+
+public record RequestModel(DocumentData Document, object Template);
+
+public record DocumentData(string Telephone, string Email);

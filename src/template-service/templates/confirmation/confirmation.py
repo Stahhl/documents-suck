@@ -1,5 +1,8 @@
-from pydantic import BaseModel
+from imports import *
 
-class Confirmation(BaseModel):
+class TemplateData(BaseModel):
     name: str
     condition: bool
+
+class Confirmation(RequestModel):
+    template: TemplateData
